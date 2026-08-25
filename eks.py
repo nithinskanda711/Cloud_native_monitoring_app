@@ -1,0 +1,41 @@
+from kubernetes import client, config
+
+#load kubernetes config
+config.load_kube_config()
+
+#create kubernetes API client
+api_client = client.ApiClient()
+ 
+# Define the deployment
+deployment = client.V1Deployment(
+    metadata=client.V1ObjectMeta(name="my-flask-app"),
+    spec=client.V1DeploymentSpec(
+        replicas=1,
+        selector=client.V1LabelSelector(
+            match_labels={"app": "my-flask-app"}
+        ),
+        template=client.V1PodTemplateSpec(
+            metadata=client.V1ObjectMeta(
+                labels={"app": "my-flask-app"}
+            ),
+            spec=client.V1PodSpec(
+                containers=[
+                    client.V1Container(
+                        name="my-flask-container",
+                        image="522161233161.dkr.ecr.eu-west-1.amazonaws.com/my-cloud-native-app",
+                        ports=[client.V1ContainerPort(container_port=5000)]
+                    )
+                ]
+            )
+        )
+    )
+)
+
+
+#create deployment
+api_instance = client.AppsV1Api(api_client)
+api_instance.create_namespaced_deployment(
+    namespace="default",
+    body=deployment
+)    
+
