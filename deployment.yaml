@@ -12,8 +12,17 @@ spec:
       labels:
         app: my-flask-app
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: my-flask-container
-          image: 522161233161.dkr.ecr.eu-west-1.amazonaws.com/my-cloud-native-app:latest
+          image: 522161233161.dkr.ecr.eu-west-1.amazonaws.com/my-cloud-native-app:v1
           ports:
-            - containerPort: 5000
+            - containerPort: 5001
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+              ephemeral-storage: "256Mi"
+            limits:
+              memory: "256Mi"
+              ephemeral-storage: "512Mi"
