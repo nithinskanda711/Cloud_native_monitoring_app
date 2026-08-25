@@ -4,3 +4,4 @@ plotly
 tenacity
 boto3
 kubernetes
+gunicorn
